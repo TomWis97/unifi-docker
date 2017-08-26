@@ -2,7 +2,7 @@
 An Docker container for the Ubiquiti Unifi Controller software.
 
 ## Why?
-The software officially is only released for Ubuntu. But because not everyone likes to run 
+The software officially is only released for Ubuntu. But because not everyone likes to run 50 different Linux distro's in one environment.
 
 ## Known issues
 - Runs two processes (Unifi and Mongodb) in a single container. The Unifi software only seems to support a localhost database connection.
