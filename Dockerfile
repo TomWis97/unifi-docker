@@ -1,11 +1,27 @@
-FROM ubuntu:16.04
-RUN apt-get update && \
-    apt-get install -y wget && \
-    wget http://dl.ubnt.com/unifi/5.5.20/unifi_sysvinit_all.deb && \
-    apt-get install -y ./unifi_sysvinit_all.deb && \
-    rm unifi_sysvinit_all.deb
+FROM ubuntu:18.04
+
+RUN apt update && \
+    apt install -y wget supervisor && \
+    wget -q http://dl.ubnt.com/unifi/5.6.37/unifi_sysvinit_all.deb && \
+    apt remove -y wget && \
+    apt install -y ./unifi_sysvinit_all.deb && \
+    rm unifi_sysvinit_all.deb && \
+    apt clean
+
+RUN apt update && \
+    apt install apt-utils software-properties-common -y && \
+    add-apt-repository ppa:webupd8team/java -y && \
+    echo debconf shared/accepted-oracle-license-v1-1 select true | \
+        debconf-set-selections && \
+    echo debconf shared/accepted-oracle-license-v1-1 seen true | \
+        debconf-set-selections && \
+    apt install oracle-java8-installer -y && \
+    apt install oracle-java8-set-default -y && \
+    apt remove apt-utils software-properties-common -y && \
+    apt clean
 
 VOLUME /var/lib/unifi
+VOLUME /var/lib/mongodb
 # Logs are located in /var/log/unifi
 
 # Ports for Unifi software
@@ -28,5 +44,5 @@ EXPOSE 8080 \
        3478/udp \
        10001/udp
 
-COPY start.sh /start.sh
-CMD /start.sh
+COPY supervisord.conf /etc/supervisord.conf
+CMD /usr/bin/supervisord -c /etc/supervisord.conf 
