@@ -78,7 +78,7 @@ do
         status=$?
         case $status in
                 0)
-                        #echo "Both are running" >&2
+                        echo "$0: Both are running"
                         ;;
                 1)
                         echo "Unify stopped unexpectedly" >&2
@@ -95,7 +95,7 @@ do
                         exit 3
 
         esac
-        sleep 5
+        sleep 10
 done
 
 echo "Done!"
