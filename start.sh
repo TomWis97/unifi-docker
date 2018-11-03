@@ -40,7 +40,7 @@ checkrunning () {
 
         /etc/init.d/unifi status > /dev/null
         unifistatus=$?
-        /etc/init.d/mongodb status > /dev/null
+        pgrep mongod
         mongodbstatus=$?
 
         # (Obviously, I'm pretty new to bash scripting)
@@ -66,9 +66,11 @@ checkrunning () {
 # Catch SIGINT (CTRL-C)
 trap rec_sigint INT
 
+echo "$0: Starting Unifi and Mongodb"
 # Start mongodb and unifi software
 /etc/init.d/unifi start
-/etc/init.d/mongodb start
+/usr/bin/mongod --config /etc/mongod.conf &
+sleep 10
 
 checking=true
 
